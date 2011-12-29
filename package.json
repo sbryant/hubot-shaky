@@ -1,0 +1,19 @@
+{
+  "name":	 "hubot-shaky",
+  "version":	 "0.1.0",
+  "author":      "Sean Bryant",
+  "keywords":    "clubot hubot shaky bot",
+  "description": "A hubot adapter that talks to clubot",
+  "engine":      "node > 0.6.0 < 0.7.0",
+  "main":        "./src/shaky",
+
+  "repository": {
+    "type": "GIT",
+    "url":  "https://github.com/sbryant/hubot-shaky/"
+  },
+
+  "dependencies": {
+    "coffee-script": "1.2.0",
+    "zmq":           "2.0.0"
+  }
+}
