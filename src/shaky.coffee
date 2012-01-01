@@ -23,10 +23,10 @@ class Shaky extends Adapter
 
     options =
       sub_addr:    process.env.HUBOT_SHAKY_SUB_ADDRESS
-      channel:     process.env.HUBOT_SHAKY_CHANNEL
+      filters:     process.env.HUBOT_SHAKY_FILTERS.split(",")
       dealer_addr: process.env.HUBOT_SHAKY_DEALER_ADDRESS
 
-    bot = new Client options.sub_addr, options.dealer_addr, options.channel
+    bot = new Client options.sub_addr, options.dealer_addr, options.filters
     bot.connect()
 
     bot.on 'message', (type, target, from, data) ->

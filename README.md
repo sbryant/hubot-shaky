@@ -16,11 +16,12 @@ Not quite there yet.
 Usage
 -----
 You configure shaky through environment variables.
+###An example configuration
 
 ```bash
-$ export HUBOT_SHAKY_SUB_ADDRESS="tcp//*:14532"
-$ export HUBOT_SHAKY_DEALER_ADDRESS="tcp//*:14533"
-$ export HUBOT_SHAKY_CHANNEL=":PRIVMSG"
+$ export HUBOT_SHAKY_SUB_ADDRESS="tcp//localhost:14532"
+$ export HUBOT_SHAKY_DEALER_ADDRESS="tcp//localhost:14533"
+$ export HUBOT_SHAKY_FILTERS=":PRIVMSG,:MENTION"
 ```
 
 Contribute
