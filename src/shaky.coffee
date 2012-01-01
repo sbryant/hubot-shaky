@@ -30,7 +30,7 @@ class Shaky extends Adapter
 
     bot.request type: "nick", (data) ->
       console.log "Setting nick to #{data.nick}"
-      self.name = data.nick
+      self.robot.name = data.nick
 
     bot.on 'message', (type, target, from, data) ->
       console.log "Msg from #{from}, #{data.toString()}"
