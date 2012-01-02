@@ -6,7 +6,8 @@ hubot-shaky: A clubot bridge to hubot.
 
 Description
 -----------
-Shaky is an adapter for hubot that let's [clubot](https://github.com/hackinggibsons/clubot) proxy commands to hubot from IRC over 0mq.
+Shaky is an adapter for hubot that interfaces with [clubot](https://github.com/hackinggibsons/clubot) to proxy messages from IRC over 0mq to hubot.
+
 
 Installtion
 -----------
