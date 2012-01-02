@@ -10,14 +10,34 @@ class Client extends events.EventEmitter
     @dealer_sock = zmq.socket 'dealer'
 
     @handlers = []
+    @channels = []
 
     @add_filter filter for filter in @filters
+    @add_filter filter for filter in [":BOOT", ":INVITE", ":JOIN", ":PART"] # standard filters
 
     @sub_sock.on 'message', (msg) ->
       [header, data] = msg.toString().split(" {")
       data = JSON.parse("{" + data)
-      [head, type, target, from] = header.split(" ")
-      self.emit 'message', type, target, from, data
+      parts = header.split(" ")
+      switch parts[0]
+        when ":BOOT"
+          for channel in @channels
+            self.request type: "join", channel: channel
+          self.emit 'boot', data
+        when ":PRIVMSG"
+          [_, type, target, from] = parts
+          self.emit 'message', type, target, from, data
+        when ":JOIN"
+          [_, user, channel, data] = parts
+          self.emit 'join', user, channel, data
+        when ":PART"
+          [_, user, channel, data] = parts
+          self.emit 'part', user, channel, data
+        when ":INVITE"
+          [_, channel, inviter, data] = parts
+          self.emit 'invite', channel, inviter, data
+        else
+          console.log "Unhandled msg #{util.inspect data}"
 
     @dealer_sock.on 'message', (msg) ->
       console.log "got a reply! #{util.inspect msg}"
@@ -40,5 +60,10 @@ class Client extends events.EventEmitter
 
   add_filter: (filter) ->
     @sub_sock.subscribe filter
+
+  shutdown: ->
+    @sub_sock.disconnect()
+    @dealer_sock.disconnect()
+    @handlers = []
 
 exports.Client = Client
