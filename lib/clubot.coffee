@@ -21,21 +21,22 @@ class Client extends events.EventEmitter
       parts = header.split(" ")
       switch parts[0]
         when ":BOOT"
-          for channel in @channels
+          for channel in self.channels
             self.request type: "join", channel: channel
           self.emit 'boot', data
         when ":PRIVMSG"
           [_, type, target, from] = parts
           self.emit 'message', type, target, from, data
         when ":JOIN"
-          [_, user, channel, data] = parts
-          self.emit 'join', user, channel, data
+          [_, user, channel] = parts
+          self.emit 'join', user, channel
         when ":PART"
-          [_, user, channel, data] = parts
-          self.emit 'part', user, channel, data
+          [_, user, channel] = parts
+          self.emit 'part', user, channel
         when ":INVITE"
-          [_, channel, inviter, data] = parts
-          self.emit 'invite', channel, inviter, data
+          [_, channel, inviter] = parts
+          console.log "Parts #{util.inspect parts}"
+          self.emit 'invite', channel, inviter
         else
           console.log "Unhandled msg #{util.inspect data}"
 
