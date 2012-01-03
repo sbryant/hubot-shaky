@@ -26,17 +26,16 @@ class Client extends events.EventEmitter
           self.emit 'boot', data
         when ":PRIVMSG"
           [_, type, target, from] = parts
-          self.emit 'message', type, target, from, data
+          self.emit 'message', data
         when ":JOIN"
           [_, user, channel] = parts
-          self.emit 'join', user, channel
+          self.emit 'join', data
         when ":PART"
           [_, user, channel] = parts
-          self.emit 'part', user, channel
+          self.emit 'part', data
         when ":INVITE"
           [_, channel, inviter] = parts
-          console.log "Parts #{util.inspect parts}"
-          self.emit 'invite', channel, inviter
+          self.emit 'invite', data
         else
           console.log "Unhandled msg #{util.inspect data}"
 

@@ -40,22 +40,22 @@ class Shaky extends Adapter
       console.log "Clubot boot event"
       self.robot.name data.nick
 
-    bot.on 'invite', (channel, inviter) ->
-      console.log "Clubot invite event, #{channel} #{inviter}"
-      self.bot.request type: "join", channel: channel
+    bot.on 'invite', (data) ->
+      console.log "Clubot invite event, #{data.where} #{data.by}"
+      self.bot.request type: "join", channel: data.where
 
-    bot.on 'join', (user, channel) ->
-      self.receive new Robot.EnterMessage(self.createOrFindUser(user, channel))
+    bot.on 'join', (data) ->
+      self.receive new Robot.EnterMessage(self.createOrFindUser(data.who, data.channel))
       console.log "Clobut join message"
 
-    bot.on 'part', (user, channel) ->
-      self.receive new Robot.LeaveMessage(self.createOrFindUser(user, channel))
+    bot.on 'part', (data) ->
+      self.receive new Robot.LeaveMessage(self.createOrFindUser(data.who, data.channel))
       console.log "Clobut part message"
 
-    bot.on 'message', (type, target, from, data) ->
-      console.log "Msg from #{from}, #{util.inspect data}"
-      user = self.createOrFindUser from, target
-      user.room = if target is "SELF" then from else target
+    bot.on 'message', (data) ->
+      console.log "Msg #{util.inspect data}"
+      room = if data.target is data.self then data.from else data.target
+      user = self.createOrFindUser data.from, room
       self.receive new Robot.TextMessage(user, data.msg)
     @bot = bot
 
