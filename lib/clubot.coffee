@@ -12,8 +12,8 @@ class Client extends events.EventEmitter
     @handlers = []
     @channels = []
 
+    @filters = unless @filters then [":PRIVMSG", ":BOOT", ":INVITE", ":JOIN", ":PART"]
     @add_filter filter for filter in @filters
-    @add_filter filter for filter in [":BOOT", ":INVITE", ":JOIN", ":PART"] # standard filters
 
     @sub_sock.on 'message', (msg) ->
       [header, data] = msg.toString().split(" {")
