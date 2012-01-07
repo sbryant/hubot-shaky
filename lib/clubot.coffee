@@ -15,26 +15,24 @@ class Client extends events.EventEmitter
     @filters = unless @filters then [":PRIVMSG", ":BOOT", ":INVITE", ":JOIN", ":PART"]
     @add_filter filter for filter in @filters
 
-    @sub_sock.on 'message', (msg) ->
-      [header, data] = msg.toString().split(" {")
-      data = JSON.parse("{" + data)
-      parts = header.split(" ")
-      switch parts[0]
+    @sub_sock.on 'error', @error
+    @dealer_sock.on 'error', @error
+
+    @sub_sock.on 'message', (headerMsg, dataMsg) ->
+      header = headerMsg.toString().split(" ")
+      data = JSON.parse(dataMsg.toString())
+      switch header[0]
         when ":BOOT"
           for channel in self.channels
             self.request type: "join", channel: channel
           self.emit 'boot', data
         when ":PRIVMSG"
-          [_, type, target, from] = parts
           self.emit 'message', data
         when ":JOIN"
-          [_, user, channel] = parts
           self.emit 'join', data
         when ":PART"
-          [_, user, channel] = parts
           self.emit 'part', data
         when ":INVITE"
-          [_, channel, inviter] = parts
           self.emit 'invite', data
         else
           console.log "Unhandled msg #{util.inspect data}"
@@ -59,11 +57,16 @@ class Client extends events.EventEmitter
       @handlers.push handler
 
   add_filter: (filter) ->
+    console.log "Subscribing to: #{filter}"
     @sub_sock.subscribe filter
 
   shutdown: ->
     @sub_sock.disconnect()
     @dealer_sock.disconnect()
     @handlers = []
+
+  error: (e) ->
+    console.log "Error: #{util.inspect e}"
+
 
 exports.Client = Client
