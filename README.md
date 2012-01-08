@@ -18,6 +18,9 @@ Download hubot-shaky.
 
 In the hubot directory:
 
+### Make sure the correct hubot version is being used.
+Change the version for hubot from `2.1.0` to `2.1.2` in package.json then do the following:
+
 ```bash
 $ npm uninstall hubot
 $ npm install /path/to/hubot-fork
